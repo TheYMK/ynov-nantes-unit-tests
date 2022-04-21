@@ -13,13 +13,20 @@ exports.config = {
   },
   helpers: {
     Playwright: {
-      waitForTimeout: 5000,
+      waitForTimeout: 20000,
       show: process.env.HEADLESS === 'true' ? false : true,
-      timeout: 5000,
+      timeout: 20000,
+
     },
-    REST:{}
+    REST: {}
   },
   bootstrap: null,
   mocha: {},
-  name: 'integrations-e2e'
+  name: 'integrations-e2e',
+  plugin: {
+    coverage: {
+      enabled: true
+    }
+  }
+
 }
