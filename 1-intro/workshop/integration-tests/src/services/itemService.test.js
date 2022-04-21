@@ -14,31 +14,17 @@ mongoose.connect("mongodb://mongo:27017/docker-node-mongo", {
 });
 
 describe("ITEM SERVICE", () => {
-  /* GET ITEM */
-  describe("Get item", () => {
-    it("should return the mocked item", () => {
-      const itemName = "Mocked item";
-      expect(itemMock.name).toBe(itemName);
-    });
-
-    it("should return the mocked item", () => {
-      expect(itemMock.name).toBe("Mocked item");
-    });
-  });
-
-  /* CREATE ITEM */
-  describe("Create item", () => {
-    it("should create & return the created item", async () => {
-      const item = new Item({ name: "Mocked item 2" });
-      const itemCreated = await ItemService.createItem(item);
-
-      expect(itemCreated.name).toBe("Mocked item 2");
+  /* ADD ITEM */
+  describe("Add item", () => {
+    it("should create the item", async () => {
+      const itemCreated = await ItemService.createItem(itemMock);
+      expect(itemCreated.name).toBe(itemMock.name);
       expect(itemCreated._id).toBeDefined();
       expect(itemCreated.date).toBeDefined();
     });
 
     it("should throw an error if the item is not valid", async () => {
-      const item = new Item({ name: "Mocked item 2" });
+      const item = new Item({ name: "Will fail" });
       item.name = "";
 
       try {
@@ -46,6 +32,15 @@ describe("ITEM SERVICE", () => {
       } catch (error) {
         expect(error.message).toBe("No name provided in the body");
       }
+    });
+  });
+
+  /* GET ITEM */
+  describe("Get item", () => {
+    it("should return items", async () => {
+      const itemsFinded = await ItemService.listItems();
+      expect(itemsFinded.length >= 0).toBeTruthy();
+      expect(itemsFinded[0] instanceof Item).toBeTruthy();
     });
   });
 });
