@@ -7,7 +7,6 @@
     "all": " node server.js & jest --watchAll --colors --coverage",
     "test": "jest --watchAll --colors --coverage",
     "server": "node server.js"
-
   },
   "author": "",
   "license": "ISC",

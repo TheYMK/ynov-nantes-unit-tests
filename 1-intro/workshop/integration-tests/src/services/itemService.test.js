@@ -1,6 +1,9 @@
 const { it, describe } = require("@jest/globals");
 const ItemService = require("./itemService");
 const mongoose = require("mongoose");
+const { MONGODB_URI_DEV } = require("../../db.config");
+
+console.log(MONGODB_URI_DEV);
 
 jest.setTimeout(30000);
 
@@ -9,9 +12,13 @@ const itemMock = new Item({
 });
 
 // Connect to MongoDB
-mongoose.connect("mongodb://mongo:27017/docker-node-mongo", {
-  useNewUrlParser: true,
-});
+mongoose
+  .connect(MONGODB_URI_DEV, {
+    useNewUrlParser: true,
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 describe("ITEM SERVICE", () => {
   /* ADD ITEM */
@@ -36,7 +43,7 @@ describe("ITEM SERVICE", () => {
   });
 
   /* GET ITEM */
-  describe("Get item", () => {
+  describe("Get items", () => {
     it("should return items", async () => {
       const itemsFinded = await ItemService.listItems();
       expect(itemsFinded.length >= 0).toBeTruthy();

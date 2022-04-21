@@ -1,11 +1,12 @@
 const { it, describe } = require("@jest/globals");
 const mongoose = require("mongoose");
 const Item = require("./Item");
+const { MONGODB_URI_DEV } = require("../../db.config");
 
 jest.setTimeout(30000);
 
 // Connect to MongoDB
-mongoose.connect("mongodb://mongo:27017/docker-node-mongo", {
+mongoose.connect(MONGODB_URI_DEV, {
   useNewUrlParser: true,
 });
 
@@ -21,6 +22,7 @@ describe("ITEM MODEL", () => {
       expect(itemCreated.name).toBe(itemMock.name);
       expect(itemCreated._id).toBeDefined();
       expect(itemCreated.date).toBeDefined();
+      console.log(itemCreated);
     });
 
     it("should throw an error if the item is not valid", async () => {

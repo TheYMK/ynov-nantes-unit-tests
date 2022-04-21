@@ -7,6 +7,15 @@ services:
       - 27017:27017
     volumes:
       - mongodb:/data/db
+  
+  mongo-test:
+    image: mongo
+    command: mongod --port 27018
+    ports:
+      - 27018:27018
+    volumes:
+      - mongodb:/data/db
+
 
   node-tests:
     build: .
@@ -17,6 +26,7 @@ services:
       - /usr/app/node_modules
     depends_on:
       - "mongo"
+      - "mongo-test"
 
 
 volumes:
