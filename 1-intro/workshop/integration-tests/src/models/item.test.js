@@ -55,4 +55,35 @@ describe("ITEM MODEL", () => {
       expect(itemFinded.length).toBe(0);
     });
   });
+
+  /* UPDATE ITEM */
+  describe("Update item", () => {
+    it("should update the item", async () => {
+      const itemFinded = await Item.findOne({ name: itemMock.name });
+      itemFinded.name = "Mocked item updated";
+      const itemUpdated = await itemFinded.save();
+      expect(itemUpdated.name).toBe("Mocked item updated");
+    });
+
+    it("should throw an error if the item is not valid", async () => {
+      const itemFinded = await Item.findOne({ name: itemMock.name });
+      itemFinded.name = "";
+      try {
+        await itemFinded.save();
+      } catch (error) {
+        expect(error.message).toBe(
+          "item validation failed: name: Path `name` is required."
+        );
+      }
+    });
+  });
+
+  /* DELETE ITEM */
+  describe("Delete item", () => {
+    it("should delete the item", async () => {
+      const itemDeleted = await Item.deleteOne({ name: itemMock.name });
+      expect(itemDeleted.deletedCount).toBe(1);
+      expect(itemDeleted.ok).toBe(1);
+    });
+  });
 });
