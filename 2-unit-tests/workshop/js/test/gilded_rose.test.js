@@ -81,7 +81,7 @@ describe("Gilded Rose", function () {
   // À la fin de chaque journée, notre système diminue ces deux valeurs pour chaque produit
   it("Checks if at the end of the day quality and sellIn value are decreased", () => {
     const gildedRose = new Shop([itemMock("foo", 10, 20)]);
-    const days = Number(process.argv[2]) || 2;
+    const days =  2;
     let items = [];
     for (let day = 0; day < days; day++) {
       console.log(`\n-------- day ${day} --------`);
@@ -176,7 +176,7 @@ describe("Gilded Rose", function () {
     const gildedRose = new Shop([
       itemMock("Conjured Mana Cake", 3, 6),
     ]);
-    const days = Number(process.argv[2]) || 2;
+    const days = 2;
     let items = [];
     for (let day = 0; day < days; day++) {
       console.log(`\n-------- day ${day} --------`);
