@@ -41,6 +41,46 @@ describe("Gilded Rose", function () {
     });
   });
 
+
+  // À la fin de chaque journée, notre système diminue ces deux valeurs pour chaque produit
+  it('Checks if at the end of the day quality and sellIn value are decreased', () => {
+    const gildedRose = new Shop([itemMock('foo', 10, 20)]);
+    const days = Number(process.argv[2]) || 2;
+    let items = []
+    for (let day = 0; day < days; day++) {
+      console.log(`\n-------- day ${day} --------`);
+      items = gildedRose.updateQuality();
+    }
+    expect(items[0].quality).toBe(18);
+    expect(items[0].sellIn).toBe(8);
+  })
+
+
+  it("'Backstage passes', like 'Aged Brie', increases its quality (quality) the more time passes (sellIn); The quality increases by 2 when there are 10 days or less left and by 3 when there are 5 days or less left, but the quality drops to 0 after the concert.", () => {
+    const gildedRose = new Shop([itemMock('Backstage passes to a TAFKAL80ETC concert', 15, 20)]);
+
+    const days = Number(process.argv[20]) || 20;
+    let items = []
+    let previousQualityValue = 20
+
+
+    for (let day = 0; day < days; day++) {
+      console.log(`\n-------- day ${day} --------`);
+      items = gildedRose.updateQuality();
+      console.log(`${items[0].name}, ${items[0].sellIn}, ${items[0].quality}`);
+      if (items[0].sellIn < 10 && items[0].sellIn > 5) {
+        expect(items[0].quality).toBe(previousQualityValue + 2);
+      } else if (items[0].sellIn < 5 && items[0].sellIn > 0) {
+        expect(items[0].quality).toBe(previousQualityValue + 3);
+      } else if (items[0].sellIn <= 0) {
+        expect(items[0].quality).toBe(0);
+      }
+
+      previousQualityValue = items[0].quality
+
+    }
+  })
+
   /* it("should foo", function () {
     const gildedRose = new Shop([new Item("foo", 0, 0)]);
     const items = gildedRose.updateQuality();
