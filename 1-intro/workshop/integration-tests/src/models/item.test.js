@@ -3,15 +3,25 @@ const mongoose = require("mongoose");
 const Item = require("./Item");
 const { MONGODB_URI_DEV } = require("../../db.config");
 
-jest.setTimeout(30000);
+jest.setTimeout(60000);
 
 // Connect to MongoDB
-mongoose.connect(MONGODB_URI_DEV, {
-  useNewUrlParser: true,
-});
+mongoose
+  .connect(MONGODB_URI_DEV, {
+    useNewUrlParser: true,
+  })
+  .catch(() => console.log("\x1b[31m%s\x1b[0m", "MongoDB connection error"));
 
 const itemMock = new Item({
   name: "Mocked item",
+});
+
+beforeAll(async () => {
+  await Item.deleteMany();
+});
+
+afterAll(async () => {
+  await Item.deleteMany();
 });
 
 describe("ITEM MODEL", () => {
@@ -22,7 +32,6 @@ describe("ITEM MODEL", () => {
       expect(itemCreated.name).toBe(itemMock.name);
       expect(itemCreated._id).toBeDefined();
       expect(itemCreated.date).toBeDefined();
-      console.log(itemCreated);
     });
 
     it("should throw an error if the item is not valid", async () => {
@@ -68,10 +77,8 @@ describe("ITEM MODEL", () => {
     });
 
     it("should throw an error if the item is not valid", async () => {
-      const itemFinded = await Item.findOne({ name: itemMock.name });
-      itemFinded.name = "";
       try {
-        await itemFinded.save();
+        await Item.findOneAndUpdate({ name: itemMock.name }, { name: "" });
       } catch (error) {
         expect(error.message).toBe(
           "item validation failed: name: Path `name` is required."

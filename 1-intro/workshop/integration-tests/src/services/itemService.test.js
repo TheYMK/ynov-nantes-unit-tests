@@ -3,9 +3,7 @@ const ItemService = require("./itemService");
 const mongoose = require("mongoose");
 const { MONGODB_URI_DEV } = require("../../db.config");
 
-console.log(MONGODB_URI_DEV);
-
-jest.setTimeout(30000);
+jest.setTimeout(60000);
 
 const itemMock = new Item({
   name: "Mocked item",
@@ -16,9 +14,15 @@ mongoose
   .connect(MONGODB_URI_DEV, {
     useNewUrlParser: true,
   })
-  .catch((err) => {
-    console.log(err);
-  });
+  .catch(() => console.log("\x1b[31m%s\x1b[0m", "MongoDB connection error"));
+
+beforeAll(async () => {
+  await Item.deleteMany();
+});
+
+afterAll(async () => {
+  await Item.deleteMany();
+});
 
 describe("ITEM SERVICE", () => {
   /* ADD ITEM */
