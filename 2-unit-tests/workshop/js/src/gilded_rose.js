@@ -13,12 +13,27 @@ class Item {
     if (typeof value !== "number")
       throw new Error("sellIn must be defined as a number");
 
-    if (value < 0) throw new Error("sellIn must be greater than or equal to 0");
-
-    if (value !== 0 && value % 1 === 0)
-      throw new Error("sellIn must be a positive integer");
+    if (!Number.isInteger(value)) throw new Error("sellIn must be a integer");
 
     this._sellIn = value;
+  }
+
+  get quality() {
+    return this._quality;
+  }
+
+  set quality(value) {
+    if (typeof value !== "number")
+      throw new Error("quality must be defined as a number");
+
+    if (value < 0) throw new Error("quality must be greater than 0");
+
+    if (!Number.isInteger(value)) throw new Error("quality must be a integer");
+
+    if (value > 50 && this.name !== "Sulfuras, Hand of Ragnaros")
+      throw new Error("quality must be less than 50");
+
+    this._quality = value;
   }
 }
 
