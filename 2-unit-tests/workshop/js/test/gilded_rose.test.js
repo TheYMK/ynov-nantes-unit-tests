@@ -56,7 +56,7 @@ describe("Gilded Rose", function () {
   })
 
 
-  it("'Backstage passes', like 'Aged Brie', increases its quality (quality) the more time passes (sellIn); The quality increases by 2 when there are 10 days or less left and by 3 when there are 5 days or less left, but the quality drops to 0 after the concert.", () => {
+  it("Checks if 'Backstage passes', like 'Aged Brie', increases its quality (quality) the more time passes (sellIn); The quality increases by 2 when there are 10 days or less left and by 3 when there are 5 days or less left, but the quality drops to 0 after the concert.", () => {
     const gildedRose = new Shop([itemMock('Backstage passes to a TAFKAL80ETC concert', 15, 20)]);
 
     const days = Number(process.argv[20]) || 20;
@@ -79,6 +79,20 @@ describe("Gilded Rose", function () {
       previousQualityValue = items[0].quality
 
     }
+  })
+
+  it("Checks if 'Sulfuras', being a legendary item, has no expiration date and never loses quality", () => {
+    const gildedRose = new Shop([itemMock('Sulfuras, Hand of Ragnaros', 0, 80)]);
+
+    const days = Number(process.argv[20]) || 20;
+    let items = []
+    for (let day = 0; day < days; day++) {
+      console.log(`\n-------- day ${day} --------`);
+      items = gildedRose.updateQuality();
+      console.log(`${items[0].name}, ${items[0].sellIn}, ${items[0].quality}`);
+    }
+
+    expect(items[0].quality).toBe(80);
   })
 
   /* it("should foo", function () {
