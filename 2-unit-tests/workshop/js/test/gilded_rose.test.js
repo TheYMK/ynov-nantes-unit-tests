@@ -132,6 +132,21 @@ describe("Gilded Rose", function () {
     expect(items[0].quality).toBe(80);
   });
 
+  it("Checks if 'Conjured' items degrade in quality twice as fast as normal items", () => {
+    const gildedRose = new Shop([
+      itemMock("Conjured Mana Cake", 3, 6),
+    ]);
+    const days = Number(process.argv[2]) || 2;
+    let items = [];
+    for (let day = 0; day < days; day++) {
+      console.log(`\n-------- day ${day} --------`);
+      items = gildedRose.updateQuality();
+      console.log(`${items[0].name}, ${items[0].sellIn}, ${items[0].quality}`);
+    }
+
+    expect(items[0].quality).toBe(2);
+  }
+  );
   /* it("should foo", function () {
     const gildedRose = new Shop([new Item("foo", 0, 0)]);
     const items = gildedRose.updateQuality();
