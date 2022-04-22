@@ -92,11 +92,7 @@ class Shop {
             this.items[i].quality =
               this.items[i].quality - this.items[i].quality;
           }
-        } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1;
-          }
-        }
+        } 
       }
     }
 

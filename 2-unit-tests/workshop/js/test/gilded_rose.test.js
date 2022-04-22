@@ -91,12 +91,52 @@ describe("Gilded Rose", function () {
     expect(items[0].sellIn).toBe(8);
   });
 
+  // Une fois que la date de péremption est passée, la qualité se dégrade deux fois plus rapidement.
+  it("Checks if the expiration date has passed (sellIn<=0) quality degrades twice as fast", () => {
+    const items = [itemMock("foo", -2, 7), itemMock("bar", 0, 4)];
+    const gildedRose = new Shop(items);
+    gildedRose.updateQuality();
+    expect(items[0].quality).toBe(5); 
+    expect(items[1].quality).toBe(2); 
+  });
+
+  // "Aged Brie" augmente sa qualité (`quality`) plus le temps passe.
+  describe("'Aged Brie'`s quality",()=>{
+    it("should increases the more time passes", () => {
+      const items = [itemMock("Aged Brie", 0, 7)];
+      const gildedRose = new Shop(items);
+      gildedRose.updateQuality();
+      expect(items[0].quality).toBe(8); 
+    });
+    it("should not be greater than 50", () => {
+      const items = [itemMock("Aged Brie", 0, 50)];
+      const gildedRose = new Shop(items);
+      gildedRose.updateQuality();
+      expect(items[0].quality).toBe(50); 
+    });
+    it("should not be greater than 50", () => {
+      const gildedRose = new Shop([itemMock("Aged Brie", 0, 35)]);
+      const days = 20;
+      let items = [];
+      let previousQualityValue = 20;
+      
+      console.log(`\nAged Brie`);
+      for (let day = 0; day < days; day++) {
+        console.log(`\n-------- day ${day} --------`);
+        items = gildedRose.updateQuality();
+        console.log(`${items[0].name}, ${items[0].sellIn}, ${items[0].quality}`);
+        
+      }
+      expect(items[0].quality).toBe(50); 
+    });
+  });
+
   it("Checks if 'Backstage passes', like 'Aged Brie', increases its quality (quality) the more time passes (sellIn); The quality increases by 2 when there are 10 days or less left and by 3 when there are 5 days or less left, but the quality drops to 0 after the concert.", () => {
     const gildedRose = new Shop([
       itemMock("Backstage passes to a TAFKAL80ETC concert", 15, 20),
     ]);
 
-    const days = Number(process.argv[20]) || 20;
+    const days = 20;
     let items = [];
     let previousQualityValue = 20;
 
@@ -121,7 +161,7 @@ describe("Gilded Rose", function () {
       itemMock("Sulfuras, Hand of Ragnaros", 0, 80),
     ]);
 
-    const days = Number(process.argv[20]) || 20;
+    const days = 20;
     let items = [];
     for (let day = 0; day < days; day++) {
       console.log(`\n-------- day ${day} --------`);
