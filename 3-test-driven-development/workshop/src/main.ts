@@ -13,15 +13,19 @@ export class Minesweeper {
     this.mines = mines;
 
     if (Number.isNaN(this.rows) || this.rows <= 0) {
-      throw new Error("Row or column can not me negative or null");
+      throw new Error("Rows can not me negative or null");
     }
 
     if (Number.isNaN(this.cols) || this.cols <= 0) {
-      throw new Error("Row or column can not me negative or null");
+      throw new Error("Columns can not me negative or null");
     }
 
     if (Number.isNaN(this.mines) || this.mines <= 0) {
-      throw new Error("Row or column can not me negative or null");
+      throw new Error("Mines can not me negative or null");
+    }
+
+    if (Number.isNaN(this.mines) || this.mines > this.rows * this.cols) {
+      throw new Error("Mines cannot be greater then (Rows*Columns)");
     }
 
     this.isGameRunning = true;
@@ -229,7 +233,7 @@ export class Minesweeper {
     this.status = "playing";
     this.solution = this.generateNumbers();
     this.userBoard = [...new Array(this.rows)].map(() => new Array(this.cols));
-    document.querySelector("#app")!.appendChild(board.createBoard());
+    document.querySelector("#app")!.appendChild(this.createBoard());
   }
 
   private reRenderRow(rowIndex: number, columnIndex: number) {

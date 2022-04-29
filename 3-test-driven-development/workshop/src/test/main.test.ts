@@ -18,6 +18,8 @@ describe("Minesweeper", () => {
     app.querySelector("#app")!.appendChild(board.createBoard());
 
     const table = app.querySelector("#app table")!;
+
+    console.log("ouiii", table);
     expect(table).toBeDefined();
     expect(table.querySelectorAll("tr").length).toBe(4);
     expect(table.querySelectorAll("td").length).toBe(16);
@@ -33,7 +35,6 @@ describe("Minesweeper", () => {
     let foundBombs = 0;
     let foundNumbers = 0;
 
-    console.log("[DEBUG] solution", board.solution);
     for (let i = 0; i < board.rows; i++) {
       for (let j = 0; j < board.cols; j++) {
         if (board.solution[i][j] === "*") {
@@ -43,8 +44,6 @@ describe("Minesweeper", () => {
         }
       }
     }
-    console.log("[DEBUG] foundBombs: ", foundBombs);
-    console.log("[DEBUG] foundNumbers: ", foundNumbers);
     expect(foundBombs).toBe(mines);
     expect(foundNumbers).toBe(rows * cols - mines);
   });
@@ -57,7 +56,6 @@ describe("Minesweeper", () => {
 
     app.querySelector("#app")!.appendChild(board.createBoard());
 
-    console.log(app.querySelector("#app")!.parentNode);
     // const table = app.querySelector("#app")!.appendChild(board.createBoard());
 
     outer: for (let i = 0; i < board.rows; i++) {
@@ -75,6 +73,39 @@ describe("Minesweeper", () => {
 
   it("should not start the game if negative rows or columns", () => {
     expect(() => new Minesweeper(-1, -1, -1)).toThrow(Error);
+    expect(() => new Minesweeper(1, 1, -1)).toThrow(Error);
+    expect(() => new Minesweeper(1, -1, 1)).toThrow(Error);
+    expect(() => new Minesweeper(-1, 1, 1)).toThrow(Error);
+  });
+
+  it("should not start the game if bomb is greater than (rows*columns)", () => {
+    expect(() => new Minesweeper(5, 5, 30)).toThrow(Error);
+  });
+
+  it("should create the exact amount of bomb", () => {
+    const board = new Minesweeper(4, 4, 12);
+    app.querySelector("#app")!.appendChild(board.createBoard());
+
+    const schema = board.solution;
+    const amountOfBomb = schema.reduce(
+      (acc, cur) => acc + cur.filter((x) => x === "*").length,
+      0
+    );
+    expect(amountOfBomb).toBe(12);
+  });
+
+  it("should create the exact amount of numbers", () => {
+    const board = new Minesweeper(4, 4, 12);
+    app.querySelector("#app")!.appendChild(board.createBoard());
+
+    const schema = board.solution;
+    const amountOfNumbers = schema.reduce(
+      (acc, cur) => acc + cur.filter((x) => x !== "*" && typeof Number).length,
+      0
+    );
+
+    const cellNumber = board.cols * board.rows - 12;
+    expect(amountOfNumbers).toBe(cellNumber);
   });
 
   // it("should end the game and have a status of 'won' if all cells without mines are selected", () => {
