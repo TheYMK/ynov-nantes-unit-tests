@@ -10,7 +10,7 @@ window.onload = function() {
       if (todo.done) {
         // add to done
         const row = document.createElement('tr');
-        row.innerHTML = `<td>${todo.text}</td>`;
+        row.innerHTML = `<td id=${'donetodo-' + index}>${todo.text}</td>`;
         doneBody.appendChild(row);
       } else {
         // add to todo table
@@ -18,11 +18,19 @@ window.onload = function() {
         row.id = `todo-${index}`;
         row.innerHTML = `
           <td scope="row" class="text-left">${todo.text}</td>
-          <td>
+          <td class="d-flex flex-row justify-content-around">
+          <button
+              class="btn btn-outline-danger btn-sm"
+              data-todo=${'canceltodo-' + index}
+              id=${'cancel-' + todo._id}
+              onClick="cancelTODO(event)"
+            >
+            <i class="fa-solid fa-trash-can"></i>
+            </button>
             <button
               class="btn btn-outline-success btn-sm"
+              data-todo=${'donetodo-' + index}
               id=${todo._id}
-              cy-data=${'todo-' + index}
               onClick="doneTODO(event)"
             >
               Done
@@ -48,6 +56,8 @@ function createTODO() {
   .then(() => window.location.reload());
 }
 
+
+
 function doneTODO(event) {
   const { id } = event.target;
   fetch(`/todo/${id}`, {
@@ -59,4 +69,23 @@ function doneTODO(event) {
     body: JSON.stringify({ done: true })
   })
   .then(() => window.location.reload());
+}
+
+
+function cancelTODO(event) {
+  try {
+    const result = event.target.id.split('cancel-')
+    fetch(`/todo/${result[1]}`, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then(() => window.location.reload())
+  
+  }catch(err) {
+    console.log('[cancelTODO]',err);
+  }
+  
+
 }
