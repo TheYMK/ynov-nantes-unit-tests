@@ -52,6 +52,18 @@ export class Minesweeper {
     return table;
   }
 
+  // initGame() {
+  //   const table: Array<any> = [];
+  //   for (let i: number = 0; i < this.rows; i++) {
+  //     const tr: Array<any> = [];
+  //     for (let j: number = 0; j < this.cols; j++) {
+  //       const td: Array<any> = [];
+  //       tr.push();
+  //     }
+  //     table.appendChild(tr);
+  //   }
+  // }
+
   private generateBombs() {
     const schema = "0".repeat(this.cols * this.rows);
     let bombString = schema;
